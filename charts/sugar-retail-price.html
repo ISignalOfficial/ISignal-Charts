@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sugar Touched Rs 62 a Kg in August, Eased in September</title>
+<title>Sugar retail prices</title>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&family=Fira+Sans+Condensed:wght@400;700&display=swap" rel="stylesheet">
 <style>
   body { margin:0; background:#ffffff; }
@@ -22,14 +22,14 @@
     .vis-sugar-retail-price { padding:16px; }
     .vis-sugar-retail-price h1 { font-size:24px; }
     .vis-sugar-retail-price .sub { font-size:15px; }
-  }
+    }
 </style>
 </head>
 <body>
 <div class="vis-sugar-retail-price">
   <div class="eyebrow"><div class="tick"></div><span>ISignal Charts</span></div>
-  <h1>Sugar Touched Rs 62 a Kg in August, Eased in September</h1>
-  <p class="sub">Average retail price rose from Rs 46.2 per kg in January to Rs 59.2 in September, after reaching Rs 61.8 in August</p>
+  <h1>The September Sugar Spike</h1>
+  <p class="sub">Average retail sugar price for September (In Rs)</p>
   <div class="chart-box"><canvas id="chart-sugar-retail-price"></canvas></div>
   <div class="foot">
     <p class="src"><strong>Source:</strong> <a href="https://foodprices.indiaspend.com" target="_blank" rel="noopener noreferrer">Food Price Watch</a></p>
@@ -41,16 +41,20 @@
 
 <script>
 (function () {
-  var labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
-  var values = [46.2, 46.7, 47.2, 47.5, 48.0, 48.5, 51.1, 61.8, 59.2];
-  var highlight = 7; // index to keep at full strength, -1 for none
+  // September average of daily national retail price (Daily Food Prices sheet), 2014-2026
+  var labels = ['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'];
+  var shortLabels = labels.map(function (y) { return "'" + y.slice(2); });
+  var values = [36.1,29.9,40.5,43.4,38.5,39.1,40.3,41.4,42.4,43.6,44.7,46.4,59.0];
+  var highlight = 12;
+  // On mobile, label only these points so labels never collide: start, 2015 low, 2025, 2026
+  var mobileLabelIdx = [0,1,11,12];
   var NAVY = '#142157';
   var FADED = 'rgba(20,33,87,0.4)';
 
   function isMobile() { return window.innerWidth < 480; }
   function sizes() {
     var m = isMobile();
-    return { tick: m ? 12 : 15, label: m ? 12 : 15, axisTitle: m ? 10 : 13,
+    return { tick: m ? 12 : 15, xTick: m ? 12 : 13, label: m ? 12 : 15, axisTitle: m ? 10 : 13,
              radius: m ? 4 : 5, hiRadius: m ? 6 : 7, line: m ? 2.5 : 3,
              aspect: m ? 1.4 : 2 };
   }
@@ -66,18 +70,16 @@
       ctx.font = '700 ' + s.label + "px 'Fira Sans Condensed', sans-serif";
       ctx.fillStyle = NAVY;
       ctx.textAlign = 'center';
-      var mobileKeep = [0, 7, 8];
       meta.data.forEach(function (pt, i) {
-        if (isMobile() && mobileKeep.indexOf(i) < 0) return;
+        if (isMobile() && mobileLabelIdx.indexOf(i) < 0) return;
         var v = values[i];
         var prev = i > 0 ? values[i - 1] : null;
         var next = i < values.length - 1 ? values[i + 1] : null;
         var dip = (prev === null || prev > v) && (next === null || next > v) && (prev !== null || next !== null) && !(prev === null && next > v && i === 0 && values.length > 1 && false);
         if (i === 0 || i === values.length - 1) dip = false;
-        if (isMobile() && i === values.length - 1 && values[i - 1] > v) dip = true;
         var gap = s.hiRadius + 8;
-        if (dip) { ctx.textBaseline = 'top'; ctx.fillText('Rs ' + v.toLocaleString('en-IN',{minimumFractionDigits:1,maximumFractionDigits:1}), pt.x, pt.y + gap); }
-        else { ctx.textBaseline = 'bottom'; ctx.fillText('Rs ' + v.toLocaleString('en-IN',{minimumFractionDigits:1,maximumFractionDigits:1}), pt.x, pt.y - gap); }
+        if (dip) { ctx.textBaseline = 'top'; ctx.fillText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y + gap); }
+        else { ctx.textBaseline = 'bottom'; ctx.fillText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y - gap); }
       });
       ctx.restore();
     }
@@ -95,7 +97,7 @@
     var ctx = document.getElementById('chart-sugar-retail-price').getContext('2d');
     return new Chart(ctx, {
       type: 'line',
-      data: { labels: labels, datasets: [{
+      data: { labels: isMobile() ? shortLabels : labels, datasets: [{
         data: values,
         borderColor: NAVY, borderWidth: s.line, tension: 0,
         pointBackgroundColor: pointColors(), pointBorderColor: pointColors(),
@@ -112,7 +114,7 @@
             offset: true,
             border: { color: '#262626' },
             grid: { display: false },
-            ticks: { color: '#262626', font: { family: "'Fira Sans Condensed', sans-serif", size: s.tick } }
+            ticks: { color: '#262626', autoSkip: false, maxRotation: 0, font: { family: "'Fira Sans Condensed', sans-serif", size: s.xTick } }
           },
           y: {
             min: 0, max: 70,
