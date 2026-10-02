@@ -114,7 +114,10 @@
             offset: true,
             border: { color: '#262626' },
             grid: { display: false },
-            ticks: { color: '#262626', autoSkip: false, maxRotation: 0, font: { family: "'Fira Sans Condensed', sans-serif", size: s.xTick } }
+            ticks: { color: '#262626', autoSkip: false, maxRotation: 0, font: { family: "'Fira Sans Condensed', sans-serif", size: s.xTick } },
+            title: { display: true, text: 'Year', color: '#262626',
+                     font: { family: "'Fira Sans Condensed', sans-serif", size: s.axisTitle, weight: 700, lineHeight: 1 },
+                     padding: { top: 4, bottom: 0 } }
           },
           y: {
             min: 0, max: 50,
