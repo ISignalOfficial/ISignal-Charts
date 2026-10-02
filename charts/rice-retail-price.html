@@ -70,6 +70,7 @@
       ctx.font = '700 ' + s.label + "px 'Fira Sans Condensed', sans-serif";
       ctx.fillStyle = NAVY;
       ctx.textAlign = 'center';
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.lineJoin = 'round';
       meta.data.forEach(function (pt, i) {
         if (isMobile() && mobileLabelIdx.indexOf(i) < 0) return;
         var v = values[i];
@@ -78,8 +79,8 @@
         var dip = (prev === null || prev > v) && (next === null || next > v) && (prev !== null || next !== null) && !(prev === null && next > v && i === 0 && values.length > 1 && false);
         if (i === 0 || i === values.length - 1) dip = false;
         var gap = s.hiRadius + 8;
-        if (dip) { ctx.textBaseline = 'top'; ctx.fillText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y + gap); }
-        else { ctx.textBaseline = 'bottom'; ctx.fillText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y - gap); }
+        if (dip) { ctx.textBaseline = 'top'; ctx.strokeText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y + gap); ctx.fillText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y + gap); }
+        else { ctx.textBaseline = 'bottom'; ctx.strokeText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y - gap); ctx.fillText(v.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }), pt.x, pt.y - gap); }
       });
       ctx.restore();
     }
@@ -107,8 +108,14 @@
         responsive: true, maintainAspectRatio: true, aspectRatio: s.aspect,
         animation: false,
         layout: { padding: { top: 30, right: 8, left: 0, bottom: 0 } },
-        plugins: { legend: { display: false }, tooltip: { enabled: false } },
-        events: [],
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: false },
+          tooltip: { enabled: true, displayColors: false, backgroundColor: NAVY,
+                     titleColor: '#ffffff', bodyColor: '#ffffff', padding: 10, cornerRadius: 4,
+                     titleFont: { family: "'Fira Sans Condensed', sans-serif", size: s.label, weight: 700 },
+                     bodyFont: { family: "'Fira Sans Condensed', sans-serif", size: s.label },
+                     callbacks: { title: function (items) { return 'September ' + labels[items[0].dataIndex]; },
+                                  label: function (item) { return 'Rs ' + item.raw.toLocaleString('en-IN', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' per kg'; } } } },
         scales: {
           x: {
             offset: true,
