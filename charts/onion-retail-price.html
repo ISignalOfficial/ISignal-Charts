@@ -28,7 +28,7 @@
 <body>
 <div class="vis-onion-retail-price">
   <div class="eyebrow"><div class="tick"></div><span>ISignal Charts</span></div>
-  <h1>September Onion Prices Reached A Six-Year High</h1>
+  <h1>September Onion Prices Were Highest Since 2015</h1>
   <p class="sub">Average retail price for September (In Rs)</p>
   <div class="chart-box"><canvas id="chart-onion-retail-price"></canvas></div>
   <div class="foot">
@@ -114,7 +114,10 @@
             offset: true,
             border: { color: '#262626' },
             grid: { display: false },
-            ticks: { color: '#262626', autoSkip: false, maxRotation: 0, font: { family: "'Fira Sans Condensed', sans-serif", size: s.xTick } }
+            ticks: { color: '#262626', autoSkip: false, maxRotation: 0, font: { family: "'Fira Sans Condensed', sans-serif", size: s.xTick } },
+            title: { display: true, text: 'Year', color: '#262626',
+                     font: { family: "'Fira Sans Condensed', sans-serif", size: s.axisTitle, weight: 700, lineHeight: 1 },
+                     padding: { top: 4, bottom: 0 } }
           },
           y: {
             min: 0, max: 60,
