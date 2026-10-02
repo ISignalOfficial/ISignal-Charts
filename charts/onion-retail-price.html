@@ -48,6 +48,8 @@
   var highlight = 12;
   // On mobile, label only these points so labels never collide: start, 2015 peak, 2016 low, 2025, 2026
   var mobileLabelIdx = [0,1,2,11,12];
+  // Desktop: label only key years (start, 2015 high, 2016 low, 2019, 2024, 2025, 2026); tooltips give the rest
+  var labelIdx = [0,1,2,5,10,11,12];
   var NAVY = '#142157';
   var FADED = 'rgba(20,33,87,0.4)';
 
@@ -72,7 +74,7 @@
       ctx.textAlign = 'center';
       ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.lineJoin = 'round';
       meta.data.forEach(function (pt, i) {
-        if (isMobile() && mobileLabelIdx.indexOf(i) < 0) return;
+        if ((isMobile() ? mobileLabelIdx : labelIdx).indexOf(i) < 0) return;
         var v = values[i];
         var prev = i > 0 ? values[i - 1] : null;
         var next = i < values.length - 1 ? values[i + 1] : null;
