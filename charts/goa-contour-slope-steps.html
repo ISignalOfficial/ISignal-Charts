@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contour Map Steps</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&family=Fira+Sans+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#fff; }
+  .vis-contour-steps-h { max-width:1000px; margin:0 auto; padding:24px; background:#fff; color:#262626; }
+  .vis-contour-steps-h * { box-sizing:border-box; font-family:'Fira Sans',sans-serif; }
+  .vis-contour-steps-h h1 { font-size:34px; font-weight:700; line-height:1.15; margin:0 0 8px; }
+  .vis-contour-steps-h .sub { font-size:19px; line-height:1.35; margin:0 0 24px; }
+  .vis-contour-steps-h .flow { display:flex; align-items:stretch; gap:0; }
+  .vis-contour-steps-h .card { flex:1; min-width:0; background:#fff; border:1px solid #e3dedb; border-top:4px solid #142157; padding:14px 12px 16px; display:flex; flex-direction:column; }
+  .vis-contour-steps-h .num { font-family:'Fira Sans Condensed',sans-serif; font-weight:700; font-size:15px; color:#e27a36; letter-spacing:0.06em; text-transform:uppercase; margin:0 0 8px; }
+  .vis-contour-steps-h .icon { height:110px; display:flex; align-items:center; justify-content:center; margin:0 0 12px; }
+  .vis-contour-steps-h .icon svg { width:100%; max-width:150px; height:110px; display:block; }
+  .vis-contour-steps-h .head { font-size:17px; font-weight:700; line-height:1.25; margin:0 0 6px; }
+  .vis-contour-steps-h .txt { font-size:15px; line-height:1.4; margin:0; }
+  .vis-contour-steps-h .arrow { width:26px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .vis-contour-steps-h .arrow svg { width:18px; height:18px; }
+  .vis-contour-steps-h svg text { font-family:'Fira Sans Condensed',sans-serif; }
+  .vis-contour-steps-h .section { font-family:'Fira Sans Condensed',sans-serif; font-size:17px; font-weight:700; color:#142157; text-transform:uppercase; letter-spacing:0.06em; margin:0 0 10px; }
+  .vis-contour-steps-h .flow + .section { margin-top:28px; }
+  .vis-contour-steps-h .foot { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-top:16px; }
+  .vis-contour-steps-h .src { font-size:12px; color:#898989; margin:0; line-height:1.5; }
+  @media (max-width:760px) and (min-width:541px) {
+    .vis-contour-steps-h .card { padding:12px 8px 14px; }
+    .vis-contour-steps-h .icon, .vis-contour-steps-h .icon svg { height:90px; }
+    .vis-contour-steps-h .head { font-size:15px; }
+    .vis-contour-steps-h .txt { font-size:13px; }
+    .vis-contour-steps-h .arrow { width:18px; }
+  }
+  @media (max-width:540px) {
+    .vis-contour-steps-h .flow { flex-direction:column; }
+    .vis-contour-steps-h .card { padding:12px 14px 14px; }
+    .vis-contour-steps-h .icon { height:150px; margin:0 0 10px; }
+    .vis-contour-steps-h .icon svg { max-width:205px; height:150px; }
+    .vis-contour-steps-h .arrow { width:100%; height:24px; }
+    .vis-contour-steps-h .arrow svg { transform:rotate(90deg); }
+  }
+  @media (max-width:480px) {
+    .vis-contour-steps-h { padding:16px; }
+    .vis-contour-steps-h h1 { font-size:24px; }
+    .vis-contour-steps-h .sub { font-size:15px; }
+    .vis-contour-steps-h .head { font-size:16px; }
+    .vis-contour-steps-h .txt { font-size:14px; }
+  }
+</style>
+</head>
+<body>
+<div class="vis-contour-steps-h">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+    <div style="width:18px;height:3px;background:#e27a36;"></div>
+    <span style="font-size:11px;font-weight:700;color:#e27a36;text-transform:uppercase;letter-spacing:0.08em;font-family:'Fira Sans Condensed',sans-serif;">IndiaSpend Charts</span>
+  </div>
+  <h1>How A Contour Map Shows The Slope Of A Plot</h1>
+  <p class="sub">From a field survey to working out how steep the land is</p>
+
+  <p class="section">Making the map</p>
+  <div class="flow">
+    <!-- Step 1 -->
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <path d="M0 98 Q40 82 75 90 T150 84 L150 110 L0 110 Z" fill="#e6dfdb"/>
+          <!-- surveyor -->
+          <circle cx="48" cy="30" r="8" fill="#142157"/>
+          <path d="M48 39 L48 66" stroke="#142157" stroke-width="7" stroke-linecap="round"/>
+          <path d="M48 66 L40 90 M48 66 L57 89" stroke="#142157" stroke-width="5" stroke-linecap="round"/>
+          <path d="M48 46 L66 52" stroke="#142157" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- instrument on tripod -->
+          <rect x="66" y="40" width="22" height="16" rx="2" fill="#2e989e"/>
+          <rect x="71" y="44" width="12" height="6" fill="#fff"/>
+          <path d="M77 56 L77 62 M77 62 L66 90 M77 62 L77 90 M77 62 L88 90" stroke="#142157" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- signal -->
+          <path d="M94 36 q6 6 0 12 M100 31 q11 11 0 22" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round"/>
+          <text x="104" y="26" font-size="12" font-weight="700" fill="#142157">x, y, z</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 1</p>
+        <p class="head">Survey the land</p>
+        <p class="txt">A land surveyor walks around the plot with a machine that captures coordinates and elevation.</p>
+      </div>
+    </div>
+
+    <div class="arrow"><svg viewBox="0 0 18 18"><path d="M3 9 H15 M10 4 L15 9 L10 14" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <!-- Step 2 -->
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <rect x="10" y="4" width="130" height="98" fill="#f7f4f3" stroke="#d9d4d1"/>
+          <path d="M30 96 H75 M30 92 V100 M75 92 V100" stroke="#9CA3AF" stroke-width="2"/>
+          <circle cx="30" cy="25" r="4" fill="#142157"/>
+          <text x="30" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+          <circle cx="75" cy="25" r="4" fill="#142157"/>
+          <text x="75" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="120" cy="25" r="4" fill="#142157"/>
+          <text x="120" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+          <circle cx="30" cy="55" r="4" fill="#142157"/>
+          <text x="30" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="75" cy="55" r="4" fill="#142157"/>
+          <text x="75" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">104</text>
+          <circle cx="120" cy="55" r="4" fill="#142157"/>
+          <text x="120" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="30" cy="85" r="4" fill="#142157"/>
+          <text x="30" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+          <circle cx="75" cy="85" r="4" fill="#142157"/>
+          <text x="75" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="120" cy="85" r="4" fill="#142157"/>
+          <text x="120" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 2</p>
+        <p class="head">Record points at regular intervals</p>
+        <p class="txt">Readings are taken at points chosen at regular intervals across the plot.</p>
+      </div>
+    </div>
+
+    <div class="arrow"><svg viewBox="0 0 18 18"><path d="M3 9 H15 M10 4 L15 9 L10 14" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <!-- Step 3 -->
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <rect x="30" y="22" width="90" height="58" rx="4" fill="#142157"/>
+          <rect x="36" y="28" width="78" height="46" fill="#fff"/>
+          <path d="M20 84 H130 L124 92 H26 Z" fill="#142157"/>
+          <g fill="#9CA3AF"><circle cx="48" cy="40" r="2.5"/><circle cx="62" cy="40" r="2.5"/><circle cx="48" cy="54" r="2.5"/><circle cx="62" cy="54" r="2.5"/><circle cx="48" cy="66" r="2.5"/><circle cx="62" cy="66" r="2.5"/></g>
+          <!-- upload arrow -->
+          <path d="M92 66 V38 M82 48 L92 38 L102 48" fill="none" stroke="#e27a36" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 3</p>
+        <p class="head">Upload to design software</p>
+        <p class="txt">The data is uploaded to design software such as AutoCAD.</p>
+      </div>
+    </div>
+
+    <div class="arrow"><svg viewBox="0 0 18 18"><path d="M3 9 H15 M10 4 L15 9 L10 14" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <!-- Step 4 -->
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <rect x="10" y="4" width="130" height="98" fill="#f7f4f3" stroke="#d9d4d1"/>
+          <ellipse cx="75" cy="55" rx="45" ry="30" fill="none" stroke="#e27a36" stroke-width="3"/>
+          <ellipse cx="75" cy="55" rx="22" ry="15" fill="none" stroke="#142157" stroke-width="2"/>
+          <circle cx="30" cy="25" r="4" fill="#142157"/>
+          <text x="30" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+          <circle cx="75" cy="25" r="4" fill="#e27a36"/>
+          <text x="75" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#e27a36" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="120" cy="25" r="4" fill="#142157"/>
+          <text x="120" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+          <circle cx="30" cy="55" r="4" fill="#e27a36"/>
+          <text x="30" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#e27a36" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="75" cy="55" r="4" fill="#142157"/>
+          <text x="75" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">104</text>
+          <circle cx="120" cy="55" r="4" fill="#e27a36"/>
+          <text x="120" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#e27a36" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="30" cy="85" r="4" fill="#142157"/>
+          <text x="30" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+          <circle cx="75" cy="85" r="4" fill="#e27a36"/>
+          <text x="75" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#e27a36" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">102</text>
+          <circle cx="120" cy="85" r="4" fill="#142157"/>
+          <text x="120" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#142157" paint-order="stroke" stroke="#f7f4f3" stroke-width="4">101</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 4</p>
+        <p class="head">Join points of equal height</p>
+        <p class="txt">The software joins points at the same altitude, creating the contour lines of the area. Here, all the 102 m points form one line.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="section">Reading the slope</p>
+  <div class="flow">
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <path d="M8 95 L75 20 L142 95 Z" fill="#e6dfdb"/>
+          <path d="M8 95 L75 20 L142 95" fill="none" stroke="#262626" stroke-width="2"/>
+          <line x1="63" y1="35" x2="87" y2="35" stroke="#142157" stroke-width="2.5"/>
+          <line x1="51" y1="50" x2="99" y2="50" stroke="#142157" stroke-width="2.5"/>
+          <line x1="39" y1="65" x2="111" y2="65" stroke="#142157" stroke-width="2.5"/>
+          <line x1="27" y1="80" x2="123" y2="80" stroke="#142157" stroke-width="2.5"/>
+          <path d="M118 50 V65 M114 50 H122 M114 65 H122" stroke="#e27a36" stroke-width="2"/>
+          <text x="125" y="62" font-size="12" font-weight="700" fill="#b2561c" font-family="Fira Sans Condensed, sans-serif">1 m</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 5</p>
+        <p class="head">Draw a line for every 1&nbsp;m</p>
+        <p class="txt">An interval of 1 m means the software draws a line for every 1 m difference in altitude.</p>
+      </div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 18 18"><path d="M3 9 H15 M10 4 L15 9 L10 14" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <rect x="10" y="4" width="130" height="98" fill="#f7f4f3" stroke="#d9d4d1"/>
+          <path d="M42 12 C34 40 50 70 40 96" fill="none" stroke="#142157" stroke-width="3"/>
+          <path d="M108 12 C100 40 116 70 106 96" fill="none" stroke="#142157" stroke-width="3"/>
+          <text x="58" y="24" font-size="12" font-weight="700" fill="#142157" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">103</text>
+          <text x="124" y="24" font-size="12" font-weight="700" fill="#142157" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">104</text>
+          <path d="M46 56 H104 M50 51 L45 56 L50 61 M100 51 L105 56 L100 61" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="75" y="48" font-size="14" font-weight="700" fill="#b2561c" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">4 m</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 6</p>
+        <p class="head">Measure the gap between lines</p>
+        <p class="txt">The distance between two lines is used to calculate the gradient. Here, the lines are 4 m apart.</p>
+      </div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 18 18"><path d="M3 9 H15 M10 4 L15 9 L10 14" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <path d="M14 88 L124 88 L124 60.5 Z" fill="#e6dfdb"/>
+          <line x1="14" y1="88" x2="124" y2="60.5" stroke="#142157" stroke-width="3"/>
+          <path d="M14 88 H124 V60.5" fill="none" stroke="#e27a36" stroke-width="2.5"/>
+          <text x="69" y="104" font-size="12" font-weight="700" fill="#b2561c" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">4 m</text>
+          <text x="128" y="79" font-size="12" font-weight="700" fill="#b2561c" font-family="Fira Sans Condensed, sans-serif">1 m</text>
+          <text x="75" y="32" font-size="22" font-weight="700" fill="#142157" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">1:4 = 25%</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 7</p>
+        <p class="head">Divide interval by distance</p>
+        <p class="txt">The ratio of the 1 m interval to the 4 m distance gives a slope of 1:4, or 25%.</p>
+      </div>
+    </div>
+    <div class="arrow"><svg viewBox="0 0 18 18"><path d="M3 9 H15 M10 4 L15 9 L10 14" fill="none" stroke="#e27a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="card">
+      <div class="icon">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
+          <rect x="6" y="4" width="66" height="56" fill="#f7f4f3" stroke="#d9d4d1"/>
+          <rect x="78" y="4" width="66" height="56" fill="#f7f4f3" stroke="#d9d4d1"/>
+          <g stroke="#142157" stroke-width="2.5"><line x1="16" y1="10" x2="16" y2="54"/><line x1="39" y1="10" x2="39" y2="54"/><line x1="62" y1="10" x2="62" y2="54"/></g>
+          <g stroke="#142157" stroke-width="2.5"><line x1="86" y1="10" x2="86" y2="54"/><line x1="98" y1="10" x2="98" y2="54"/><line x1="110" y1="10" x2="110" y2="54"/><line x1="122" y1="10" x2="122" y2="54"/><line x1="134" y1="10" x2="134" y2="54"/></g>
+          <path d="M8 92 L70 80 L70 92 Z" fill="#e6dfdb"/><line x1="8" y1="92" x2="70" y2="80" stroke="#262626" stroke-width="2"/>
+          <path d="M80 92 L142 66 L142 92 Z" fill="#e6dfdb"/><line x1="80" y1="92" x2="142" y2="66" stroke="#262626" stroke-width="2"/>
+          <text x="39" y="106" font-size="12" font-weight="700" fill="#142157" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">Flatter</text>
+          <text x="111" y="106" font-size="12" font-weight="700" fill="#b2561c" font-family="Fira Sans Condensed, sans-serif" text-anchor="middle">Steeper</text>
+        </svg>
+      </div>
+      <div>
+        <p class="num">Step 8</p>
+        <p class="head">Closer lines, steeper slope</p>
+        <p class="txt">The closer the lines are, the steeper the slope of that specific area.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p class="src"><strong>Source:</strong> IndiaSpend illustration</p>
+    <a href="https://www.indiaspend.com/" target="_blank" rel="noopener noreferrer" style="flex-shrink:0;display:inline-block;line-height:0;">
+      <img src="https://www.indiaspend.com/images/logo.svg?v=1" alt="IndiaSpend" style="height:24px;width:auto;display:block;">
+    </a>
+  </div>
+</div>
+<script src="../copy-chart.js"></script>
+</body>
+</html>
