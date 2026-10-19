@@ -53,7 +53,7 @@
 <div class="vis-contour-steps-h">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
     <div style="width:18px;height:3px;background:#e27a36;"></div>
-    <span style="font-size:11px;font-weight:700;color:#e27a36;text-transform:uppercase;letter-spacing:0.08em;font-family:'Fira Sans Condensed',sans-serif;">IndiaSpend Charts</span>
+    <span style="font-size:11px;font-weight:700;color:#e27a36;text-transform:uppercase;letter-spacing:0.08em;font-family:'Fira Sans Condensed',sans-serif;">ISignal Charts</span>
   </div>
   <h1>How A Contour Map Shows The Slope Of A Plot</h1>
   <p class="sub">From a field survey to working out how steep the land is</p>
@@ -260,12 +260,51 @@
   </div>
 
   <div class="foot">
+    <button type="button" id="copy-chart-contour-steps" aria-label="Copy chart embed code" style="display:inline-flex;align-items:center;gap:6px;font-family:'Fira Sans Condensed',sans-serif;font-size:13px;font-weight:700;color:#142157;background:#fff;border:1px solid #142157;border-radius:3px;padding:6px 10px;cursor:pointer;line-height:1;">
+      <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 1h8a2 2 0 0 1 2 2v8h-2V3H5zM1 5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2z" fill="currentColor"/></svg>
+      <span>Copy chart</span>
+    </button>
     <span></span>
     <a href="https://www.indiaspend.com/" target="_blank" rel="noopener noreferrer" style="flex-shrink:0;display:inline-block;line-height:0;">
       <img src="https://www.indiaspend.com/images/logo.svg?v=1" alt="IndiaSpend" style="height:24px;width:auto;display:block;">
     </a>
   </div>
 </div>
+<script>
+(function () {
+  var btn = document.getElementById('copy-chart-contour-steps');
+  if (!btn) return;
+  var label = btn.querySelector('span');
+  function embedCode() {
+    var url = window.location.href.split('#')[0].split('?')[0];
+    var h = Math.ceil(document.documentElement.scrollHeight) + 10;
+    return '<iframe src="' + url + '" title="How A Contour Map Shows The Slope Of A Plot" width="100%" height="' + h + '" style="border:none;" scrolling="no" loading="lazy"></iframe>';
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function flash(text) {
+    label.textContent = text;
+    setTimeout(function () { label.textContent = 'Copy chart'; }, 2000);
+  }
+  btn.addEventListener('click', function () {
+    var code = embedCode();
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(code).then(function () { flash('Copied!'); }, function () {
+        flash(fallbackCopy(code) ? 'Copied!' : 'Copy failed');
+      });
+    } else {
+      flash(fallbackCopy(code) ? 'Copied!' : 'Copy failed');
+    }
+  });
+})();
+</script>
 <script src="../copy-chart.js"></script>
 </body>
 </html>
