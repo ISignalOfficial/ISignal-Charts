@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3 In 4 Shutdowns Cut Mobile Internet Alone</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&family=Fira+Sans+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<style>
+.vis-shutdowns-network-type { max-width:700px; margin:0 auto; padding:24px; background:#f7f4f3; }
+.vis-shutdowns-network-type * { box-sizing:border-box; font-family:'Fira Sans', sans-serif; }
+.vis-shutdowns-network-type .eyebrow { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.vis-shutdowns-network-type .eyebrow-tick { width:18px; height:3px; background:#e27a36; }
+.vis-shutdowns-network-type .eyebrow-text { font-size:11px; font-weight:700; color:#e27a36; letter-spacing:0.08em; font-family:'Fira Sans Condensed', sans-serif; }
+.vis-shutdowns-network-type h1 { font-size:34px; font-weight:700; color:#262626; margin:0 0 8px; line-height:1.15; }
+.vis-shutdowns-network-type .subtitle { font-size:19px; color:#262626; margin:0 0 16px; line-height:1.35; }
+.vis-shutdowns-network-type .legend { display:flex; flex-wrap:wrap; gap:18px; margin:0 0 10px; }
+.vis-shutdowns-network-type .legend-item { display:flex; align-items:center; gap:8px; font-family:'Fira Sans Condensed', sans-serif; font-weight:700; font-size:15px; color:#262626; }
+.vis-shutdowns-network-type .legend-swatch { width:22px; height:4px; border-radius:2px; }
+.vis-shutdowns-network-type .chart-box { position:relative; width:100%; }
+.vis-shutdowns-network-type .footer { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin-top:10px; }
+.vis-shutdowns-network-type .source { font-size:12px; color:#898989; margin:0; line-height:1.5; }
+.vis-shutdowns-network-type .note { font-size:12px; color:#5C5C5C; margin:8px 0 0; font-style:italic; }
+.vis-shutdowns-network-type .logo { flex-shrink:0; display:inline-block; line-height:0; }
+.vis-shutdowns-network-type .logo img { height:24px; width:auto; display:block; }
+@media (max-width:480px) {
+  .vis-shutdowns-network-type { padding:16px; }
+  .vis-shutdowns-network-type h1 { font-size:24px; }
+  .vis-shutdowns-network-type .subtitle { font-size:15px; }
+  .vis-shutdowns-network-type .legend-item { font-size:12px; }
+}
+</style>
+</head>
+<body style="margin:0;background:#f7f4f3;">
+<div class="vis-shutdowns-network-type">
+  <div class="eyebrow"><div class="eyebrow-tick"></div><span class="eyebrow-text">ISignal Charts</span></div>
+  <h1>3 In 4 Shutdowns Cut Mobile Internet Alone</h1>
+  <p class="subtitle">Shutdowns recorded by network suspended, 2012 to November 9, 2026</p>
+  
+  <div class="chart-box" id="box-shutdowns-network-type"><canvas id="chart-shutdowns-network-type" role="img" aria-label="3 In 4 Shutdowns Cut Mobile Internet Alone"></canvas></div>
+  <div class="footer">
+    <p class="source"><strong>Source:</strong> Software Freedom Law Center, India (SFLC.in) Internet Shutdown Tracker, data till November 9, 2026</p>
+    <a class="logo" href="https://www.isignal.in/" target="_blank" rel="noopener noreferrer"><img src="https://www.isignal.in/images/logo.png?v=1" alt="ISignal"></a>
+  </div>
+  
+</div>
+<script>
+(function () {
+  var SLUG = 'shutdowns-network-type';
+  var CFG = {"type": "hbar", "labels": ["Mobile internet only", "Mobile and broadband", "Not specified", "Broadband only"], "values": [721, 134, 76, 4], "barLabels": ["721 (77.1%)", "134 (14.3%)", "76 (8.1%)", "4 (0.4%)"], "highlight": [0], "grey": [2], "xTitle": "Shutdowns recorded"};
+  var NAVY = '#142157', TEAL = '#2e989e', TEAL_TEXT = '#1d6468', INK = '#262626';
+  var chart = null, lastMobile = null;
+
+  function isMobile() { return window.innerWidth < 480; }
+  function fmt(v) { return Number(v).toLocaleString('en-IN'); }
+  function rgba(hex, a) {
+    var n = parseInt(hex.slice(1), 16);
+    return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+
+  // Draws value labels. Line charts: labels above points, pushed below when two labels
+  // at the same x sit closer than 28px. Horizontal bars: label at bar end.
+  var labelPlugin = {
+    id: 'labels-' + SLUG,
+    afterDatasetsDraw: function (c) {
+      var m = isMobile(), ctx = c.ctx, size = m ? 12 : 15;
+      ctx.save();
+      ctx.font = '400 ' + size + "px 'Fira Sans Condensed', sans-serif";
+      if (CFG.type === 'hbar') {
+        var meta = c.getDatasetMeta(0);
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        meta.data.forEach(function (bar, i) {
+          ctx.fillStyle = INK;
+          ctx.fillText(CFG.barLabels ? CFG.barLabels[i] : fmt(CFG.values[i]), bar.x + 6, bar.y);
+        });
+      } else {
+        var placed = [];
+        c.data.datasets.forEach(function (ds, di) {
+          var meta = c.getDatasetMeta(di);
+          var idx = (m ? ds._labelsMobile : ds._labelsDesktop) || [];
+          idx.forEach(function (i) {
+            var p = meta.data[i];
+            placed.push({ x: p.x, y: p.y, i: i, text: ds._fmt(ds.data[i]), color: ds._textColor, v: ds.data[i], data: ds.data });
+          });
+        });
+        // Side rule: troughs below, peaks/ends above, rising points up-left, falling points up-right,
+        // so the label never sits on the line itself.
+        placed.forEach(function (a) {
+          var d = a.data, i = a.i, prev = i > 0 ? d[i - 1] : null, next = i < d.length - 1 ? d[i + 1] : null;
+          a.below = prev !== null && next !== null && a.v < prev && a.v < next;
+          a.align = 'center';
+          if (!a.below && prev !== null && next !== null) {
+            if (prev < a.v && next > a.v) a.align = 'right';
+            if (prev > a.v && next < a.v) a.align = 'left';
+          }
+        });
+        // Overlap rule: two labels at the same x closer than 28px, the lower value goes below.
+        placed.forEach(function (a) {
+          placed.forEach(function (b) {
+            if (a !== b && a.i === b.i && Math.abs(a.y - b.y) < 28 && a.v < b.v) { a.below = true; a.align = 'center'; b.below = false; }
+          });
+        });
+        // End labels sit to the right of the last point, nudged apart if closer than 18px.
+        var ends = placed.filter(function (a) { return a.i === a.data.length - 1; });
+        ends.forEach(function (a) { a.end = true; a.ey = a.y; });
+        ends.sort(function (p, q) { return p.ey - q.ey; });
+        for (var k = 1; k < ends.length; k++) {
+          var gap = ends[k].ey - ends[k - 1].ey;
+          if (gap < 18) { ends[k - 1].ey -= (18 - gap) / 2; ends[k].ey += (18 - gap) / 2; }
+        }
+        placed.forEach(function (a) {
+          ctx.fillStyle = a.color;
+          if (a.end) { ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText(a.text, a.x + 9, a.ey); return; }
+          ctx.textAlign = a.align;
+          ctx.textBaseline = a.below ? 'top' : 'bottom';
+          var dx = a.align === 'right' ? -6 : a.align === 'left' ? 6 : 0;
+          ctx.fillText(a.text, a.x + dx, a.below ? a.y + 9 : a.y - (a.align === 'center' ? 9 : 5));
+        });
+      }
+      ctx.restore();
+    }
+  };
+
+  function axisTitle(text, m) {
+    return { display: !!text, text: text, color: INK, padding: { top: 0, bottom: 2 },
+      font: { family: "'Fira Sans Condensed', sans-serif", size: (m ? 12 : 15) - 2, weight: '700', lineHeight: 1 } };
+  }
+  function tickFont(m) { return { family: "'Fira Sans Condensed', sans-serif", size: m ? 12 : 15 }; }
+
+  function build() {
+    var m = isMobile();
+    lastMobile = m;
+    if (chart) chart.destroy();
+    var box = document.getElementById('box-' + SLUG);
+    var config;
+    if (CFG.type === 'hbar') {
+      var n = CFG.labels.length;
+      box.style.height = (n * (m ? 34 : 40) + 60) + 'px';
+      var colors = CFG.labels.map(function (_, i) {
+        if (CFG.grey && CFG.grey.indexOf(i) > -1) return '#9CA3AF';
+        return CFG.highlight.indexOf(i) > -1 ? NAVY : rgba(NAVY, 0.38);
+      });
+      config = {
+        type: 'bar',
+        data: { labels: CFG.labels, datasets: [{ data: CFG.values, backgroundColor: colors, borderWidth: 0, barPercentage: 0.78, categoryPercentage: 0.9 }] },
+        options: {
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
+          layout: { padding: { right: m ? 70 : 96 } },
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          scales: {
+            x: { beginAtZero: true, grace: '4%', border: { display: false }, grid: { color: 'rgba(0,0,0,0.06)', drawTicks: false },
+                 ticks: { color: INK, font: tickFont(m), padding: 4, maxTicksLimit: m ? 4 : 6, callback: function (v) { return fmt(v); } },
+                 title: axisTitle(CFG.xTitle, m) },
+            y: { border: { color: INK }, grid: { display: false }, ticks: { color: INK, font: tickFont(m), padding: 6 } }
+          }
+        },
+        plugins: [labelPlugin]
+      };
+    } else {
+      box.style.height = '';
+      var datasets = CFG.series.map(function (s) {
+        var col = s.color === 'teal' ? TEAL : NAVY;
+        var last = s.data.length - 1;
+        return {
+          label: s.name, data: s.data, borderColor: col, backgroundColor: col,
+          borderWidth: m ? 2.5 : 3, pointRadius: m ? 4 : 5, pointBorderColor: '#f7f4f3', pointBorderWidth: 2,
+          pointHoverRadius: m ? 5 : 6, tension: 0,
+          segment: { borderDash: function (ctx) { return CFG.dashLast && ctx.p1DataIndex === last ? [5, 4] : undefined; } },
+          _labelsDesktop: s.labelsDesktop, _labelsMobile: s.labelsMobile,
+          _textColor: s.color === 'teal' ? TEAL_TEXT : NAVY,
+          _fmt: function (v) { return fmt(v) + (CFG.unit || ''); }
+        };
+      });
+      config = {
+        type: 'line',
+        data: { labels: CFG.labels, datasets: datasets },
+        options: {
+          responsive: true, maintainAspectRatio: true, aspectRatio: m ? 1.4 : 2, animation: false,
+          layout: { padding: { top: 26, right: m ? 26 : 32 } },
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false },
+            tooltip: { enabled: !!CFG.tooltips, titleFont: tickFont(m), bodyFont: tickFont(m),
+              callbacks: { label: function (c) { return ' ' + c.dataset.label + ': ' + fmt(c.parsed.y) + (CFG.unit || ''); } } } },
+          scales: {
+            x: { offset: true, border: { color: INK }, grid: { display: false },
+                 ticks: { color: INK, font: tickFont(m), maxRotation: 0, autoSkip: true, autoSkipPadding: m ? 8 : 6 } },
+            y: { beginAtZero: true, max: CFG.yMax, border: { display: false }, grid: { color: 'rgba(0,0,0,0.06)', drawTicks: false },
+                 ticks: { color: INK, font: tickFont(m), padding: 4, maxTicksLimit: 6, callback: function (v) { return fmt(v) + (CFG.unit || ''); } },
+                 title: axisTitle(CFG.yTitle, m) }
+          }
+        },
+        plugins: [labelPlugin]
+      };
+    }
+    chart = new Chart(document.getElementById('chart-' + SLUG), config);
+  }
+
+  function start() {
+    var go = function () { build(); };
+    // Canvas text does not trigger font downloads, so request the faces explicitly before drawing.
+    if (document.fonts && document.fonts.load) {
+      Promise.all([
+        document.fonts.load("400 15px 'Fira Sans Condensed'"),
+        document.fonts.load("700 15px 'Fira Sans Condensed'")
+      ]).then(go, go);
+    } else go();
+    window.addEventListener('resize', function () { if (isMobile() !== lastMobile) build(); });
+  }
+
+  if (window.Chart) { start(); return; }
+  var existing = document.querySelector('script[data-chartjs]');
+  if (existing) { existing.addEventListener('load', start); return; }
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+  s.setAttribute('data-chartjs', '1');
+  s.onload = start;
+  document.head.appendChild(s);
+})();
+</script>
+<script src="../copy-chart.js"></script>
+</body>
+</html>
